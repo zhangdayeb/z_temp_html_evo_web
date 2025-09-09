@@ -92,18 +92,32 @@
             transform: scaleX(-1);
         }
 
-        /* 背景图案 */
+        /* 背景图案 - 使用rainbowpat图片 */
         .spot-background {
             position: absolute;
             top: 0;
             bottom: 0;
             left: 0;
             right: 0;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" fill="rgba(255,255,255,0.02)"/><path d="M0 40L40 0M40 40L80 0M-40 40L0 0" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></svg>');
-            background-size: 40px 40px;
-            background-repeat: repeat;
-            opacity: 0.3;
+            background-image: url('https://t.wd9898.top/rainbowpat.webp');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            opacity: 0.15;
             z-index: 1;
+        }
+
+        /* Player区域背景定位 */
+        .player-spot .spot-background {
+            right: 75px;
+            left: 0;
+        }
+
+        /* Banker区域背景定位 */
+        .banker-spot .spot-background {
+            left: 75px;
+            right: 0;
         }
 
         /* 统计信息区域 */
