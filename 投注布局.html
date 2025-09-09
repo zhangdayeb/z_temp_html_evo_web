@@ -100,12 +100,23 @@
             left: 0;
             right: 0;
             background-image: url('https://t.wd9898.top/rainbowpat.webp');
-            background-size: cover;
-            background-repeat: no-repeat;
+            background-size: auto;
+            background-repeat: repeat;
             background-position: center;
-            background-attachment: fixed;
             opacity: 0.15;
             z-index: 1;
+            
+            /* 添加径向渐变遮罩 */
+            -webkit-mask-image: radial-gradient(ellipse at center, 
+                rgba(0,0,0,1) 0%, 
+                rgba(0,0,0,1) 40%, 
+                rgba(0,0,0,0) 70%
+            );
+            mask-image: radial-gradient(ellipse at center, 
+                rgba(0,0,0,1) 0%, 
+                rgba(0,0,0,1) 40%, 
+                rgba(0,0,0,0) 70%
+            );
         }
 
         /* Player区域背景定位 */
@@ -559,6 +570,9 @@
                           stroke-width="2" 
                           fill-opacity="0.8"/>
                 </svg>
+
+                <!-- 背景图案 -->
+                <div class="spot-background"></div>
                 
                 <div class="spot-content">
                     <!-- 统计信息 -->
