@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>霓虹倒计时</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #2a1810; /* 深褐色背景，模拟你图片的背景 */
+        }
+        
+        .container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+        
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .number {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 100px;
+            font-weight: bold;
+            color: white;
+            font-family: Arial, sans-serif;
+            z-index: 10;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+        
+        button {
+            margin-top: 30px;
+            padding: 15px 50px;
+            font-size: 18px;
+            background: #00e676;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 230, 118, 0.5);
+        }
+        
+        button:hover {
+            background: #00ff88;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 多层画布实现发光效果 -->
+        <canvas id="glowCanvas" width="300" height="300"></canvas>
+        <canvas id="mainCanvas" width="300" height="300"></canvas>
+        <div class="number" id="number">6</div>
+    </div>
+    <button onclick="startTimer()">开始</button>
+    
+    <script>
+        const glowCanvas = document.getElementById('glowCanvas');
+        const glowCtx = glowCanvas.getContext('2d');
+        const mainCanvas = document.getElementById('mainCanvas');
+        const mainCtx = mainCanvas.getContext('2d');
+        const numberEl = document.getElementById('number');
+        
+        let timer = null;
+        let count = 10;
+        const centerX = 150;
+        const centerY = 150;
+        const radius = 120;
+        
+        function drawCountdown() {
+            // 清空画布
+            glowCtx.clearRect(0, 0, 300, 300);
+            mainCtx.clearRect(0, 0, 300, 300);
+            
+            // 1. 绘制黑色半透明背景圆
+            mainCtx.beginPath();
+            mainCtx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            mainCtx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            mainCtx.fill();
+            
+            // 2. 在glowCanvas上绘制多层发光效果（降低亮度）
+            // 最外层大光晕
+            glowCtx.save();
+            glowCtx.filter = 'blur(15px)';
+            glowCtx.beginPath();
+            glowCtx.arc(centerX, centerY, radius, -Math.PI/2, Math.PI * 1.5);
+            glowCtx.strokeStyle = 'rgba(0, 255, 136, 0.2)';  // 降低透明度
+            glowCtx.lineWidth = 35;  // 增加宽度
+            glowCtx.lineCap = 'round';
+            glowCtx.stroke();
+            glowCtx.restore();
+            
+            // 中层光晕
+            glowCtx.save();
+            glowCtx.filter = 'blur(8px)';
+            glowCtx.beginPath();
+            glowCtx.arc(centerX, centerY, radius, -Math.PI/2, Math.PI * 1.5);
+            glowCtx.strokeStyle = 'rgba(0, 255, 136, 0.3)';  // 降低透明度
+            glowCtx.lineWidth = 25;  // 增加宽度
+            glowCtx.lineCap = 'round';
+            glowCtx.stroke();
+            glowCtx.restore();
+            
+            // 内层光晕
+            glowCtx.save();
+            glowCtx.filter = 'blur(4px)';
+            glowCtx.beginPath();
+            glowCtx.arc(centerX, centerY, radius, -Math.PI/2, Math.PI * 1.5);
+            glowCtx.strokeStyle = 'rgba(0, 255, 136, 0.4)';  // 降低透明度
+            glowCtx.lineWidth = 20;  // 增加宽度
+            glowCtx.lineCap = 'round';
+            glowCtx.stroke();
+            glowCtx.restore();
+            
+            // 3. 绘制主圆环 - 增加宽度
+            mainCtx.save();
+            mainCtx.shadowBlur = 10;  // 减少阴影模糊
+            mainCtx.shadowColor = 'rgba(0, 255, 136, 0.5)';  // 降低阴影亮度
+            mainCtx.beginPath();
+            mainCtx.arc(centerX, centerY, radius, -Math.PI/2, Math.PI * 1.5);
+            mainCtx.strokeStyle = '#00ff88'; // 明亮的青绿色
+            mainCtx.lineWidth = 20;  // 从12增加到20
+            mainCtx.lineCap = 'round';
+            mainCtx.stroke();
+            mainCtx.restore();
+            
+            // 4. 绘制中心亮线（模拟霓虹灯管中心）
+            mainCtx.save();
+            mainCtx.beginPath();
+            mainCtx.arc(centerX, centerY, radius, -Math.PI/2, Math.PI * 1.5);
+            mainCtx.strokeStyle = 'rgba(255, 255, 255, 0.6)'; // 降低白色亮度
+            mainCtx.lineWidth = 6;  // 从4增加到6
+            mainCtx.lineCap = 'round';
+            mainCtx.stroke();
+            mainCtx.restore();
+        }
+        
+        function startTimer() {
+            if (timer) clearInterval(timer);
+            
+            count = 10;
+            numberEl.textContent = count;
+            
+            timer = setInterval(() => {
+                count--;
+                numberEl.textContent = count;
+                
+                if (count <= 0) {
+                    clearInterval(timer);
+                    timer = null;
+                }
+            }, 1000);
+        }
+        
+        // 初始化绘制
+        drawCountdown();
+    </script>
+</body>
+</html>
