@@ -131,85 +131,45 @@
             right: 0;
         }
 
-        /* 统计信息区域 */
-        .statistics {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* 圆形百分比指示器 */
-        .indicator {
-            position: relative;
-            width: 40px;
-            height: 40px;
-        }
-
-        .indicator svg {
-            width: 100%;
-            height: 100%;
-            transform: rotate(-90deg);
-        }
-
-        .indicator-text {
+        /* 扑克牌容器 */
+        .cards-container {
             position: absolute;
-            top: 50%;
+            top: 30%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-        }
-
-        /* 信息显示 */
-        .info {
             display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .info-line {
-            display: flex;
+            gap: 2px;
             align-items: center;
-            gap: 3px;
-            font-size: 11px;
-            color: white;
+            z-index: 3;
         }
-
-        .info-line .amount {
-            font-weight: 600;
+        
+        /* Player区域扑克牌位置 */
+        .player-spot .cards-container {
+            left: 40%;
         }
-
-        /* 图标样式 */
-        .icon-person {
-            width: 12px;
-            height: 12px;
-            display: inline-block;
+        
+        /* Banker区域扑克牌位置 */
+        .banker-spot .cards-container {
+            left: 60%;
         }
-
-        .icon-currency {
-            width: 12px;
-            height: 12px;
-            display: inline-block;
+        
+        /* 扑克牌样式 */
+        .card {
+            width: 26px;
+            height: 36px;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
         }
-
-        /* Player统计左对齐 */
-        .player-spot .statistics {
-            flex-direction: row;
+        
+        /* 横牌样式 - Player向右旋转90度 */
+        .player-spot .card.horizontal {
+            transform: rotate(90deg);
+            margin: 0 4px;
         }
-
-        .player-spot .info {
-            align-items: flex-start;
-        }
-
-        /* Banker统计右对齐 */
-        .banker-spot .statistics {
-            flex-direction: row-reverse;
-        }
-
-        .banker-spot .info {
-            align-items: flex-end;
+        
+        /* 横牌样式 - Banker向左旋转-90度 */
+        .banker-spot .card.horizontal {
+            transform: rotate(-90deg);
+            margin: 0 4px;
         }
 
         /* 标题和赔率 */
@@ -240,6 +200,16 @@
         .banker-spot .zone-odds {
             color: #FF9792;
         }
+        
+        /* Player区域标题位置 */
+        .player-spot .title-section {
+            align-self: flex-start;
+        }
+        
+        /* Banker区域标题位置 */
+        .banker-spot .title-section {
+            align-self: flex-end;
+        }
 
         /* 和局区域 - 中间独立区域 */
         .tie-spot {
@@ -260,47 +230,28 @@
             padding: 12px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             height: 100%;
             position: relative;
             z-index: 2;
         }
 
-        /* 和局统计顶部 */
-        .tie-spot .statistics {
-            flex-direction: column;
-            margin-top: 12px;
-        }
-
-        .tie-spot .info {
-            flex-direction: row;
-            gap: 10px;
-            align-items: center;
-            margin-top: 4px;
-        }
-
-        .tie-spot .info-line {
-            font-size: 10px;
-            color: white;
-        }
-
         /* 和局标题和赔率横向排列 */
         .tie-spot .title-section {
             flex-direction: row;
-            gap: 8px;
+            gap: 10px;
             align-items: center;
-            margin-bottom: 4px;
         }
 
         .tie-spot .zone-title {
-            font-size: 18px;
+            font-size: 20px;
             color: white;
         }
 
         .tie-spot .zone-odds {
             color: #0DD80C;
-            font-size: 13px;
+            font-size: 15px;
         }
 
         /* 对子投注区域 */
@@ -394,11 +345,6 @@
                 font-size: 12px;
             }
 
-            .indicator {
-                width: 36px;
-                height: 36px;
-            }
-
             .tie-spot .zone-title {
                 font-size: 16px;
             }
@@ -421,6 +367,11 @@
 
             .banker-spot .spot-content {
                 left: 65px;
+            }
+            
+            .card {
+                width: 20px;
+                height: 28px;
             }
         }
     </style>
@@ -455,40 +406,59 @@
                 
                 <!-- 内容区域 -->
                 <div class="spot-content">
-                    <!-- 统计信息 -->
-                    <div class="statistics">
-                        <div class="indicator">
-                            <svg viewBox="0 0 46 46">
-                                <circle cx="23" cy="23" r="20" fill="rgba(0, 20, 60, 0.8)"/>
-                                <circle cx="23" cy="23" r="18" stroke="#0096FF" stroke-width="3" 
-                                        fill="none" stroke-dasharray="113.1" stroke-dashoffset="90.48"
-                                        stroke-linecap="round"/>
-                            </svg>
-                            <div class="indicator-text">20%</div>
-                        </div>
-                        <div class="info">
-                            <div class="info-line">
-                                <!-- 欧元符号SVG -->
-                                <svg class="icon-currency" viewBox="0 0 24 24" fill="white">
-                                    <path d="M15 18.5C12.5 18.5 10.3 17.1 9.2 15H15L16 13H8.6C8.5 12.5 8.5 12 8.5 11.5S8.5 10.5 8.6 10H16L17 8H9.2C10.3 5.9 12.5 4.5 15 4.5C16.3 4.5 17.5 4.9 18.5 5.6L20 4.1C18.6 3 16.9 2.5 15 2.5C11.5 2.5 8.5 4.6 7.1 7.5H4L3 9.5H6.5C6.5 10 6.5 10.5 6.5 11S6.5 12 6.5 12.5H3L2 14.5H7.1C8.5 17.4 11.5 19.5 15 19.5C16.9 19.5 18.6 19 20 17.9L18.5 16.4C17.5 17.1 16.3 17.5 15 18.5Z"/>
-                                </svg>
-                                <span class="amount">247.36</span>
-                            </div>
-                            <div class="info-line">
-                                <!-- 单人头像SVG - 亮蓝色 -->
-                                <svg class="icon-person" viewBox="0 0 24 24" fill="#00BFFF">
-                                    <path d="M12,12A6,6 0 0,0 6,18C6,18.55 6.45,19 7,19H17C17.55,19 18,18.55 18,18A6,6 0 0,0 12,12M12,2A4,4 0 0,1 16,6A4,4 0 0,1 12,10A4,4 0 0,1 8,6A4,4 0 0,1 12,2Z"/>
-                                </svg>
-                                <span>14</span>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- 占位div保持顶部空间 -->
+                    <div></div>
                     
                     <!-- 标题和赔率 -->
                     <div class="title-section">
                         <div class="zone-odds">1:1</div>
                         <div class="zone-title">PLAYER</div>
                     </div>
+                </div>
+                
+                <!-- 扑克牌 -->
+                <div class="cards-container">
+                    <!-- 第一张竖牌 -->
+                    <svg class="card" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 250">
+                        <defs>
+                            <linearGradient id="p1CardBg" x1="90" y1="0" x2="90" y2="250" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="100%" stop-color="#f8f8f8"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="2" y="2" width="176" height="246" rx="12" fill="url(#p1CardBg)"/>
+                        <rect x="2" y="2" width="176" height="246" rx="12" fill="none" stroke="#d0d0d0" stroke-width="2"/>
+                        <text x="90" y="80" font-size="180" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#000000" font-family="Arial, sans-serif">7</text>
+                        <text x="90" y="190" font-size="108" text-anchor="middle" dominant-baseline="central" fill="#000000">♣</text>
+                    </svg>
+                    
+                    <!-- 第二张竖牌 -->
+                    <svg class="card" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 250">
+                        <defs>
+                            <linearGradient id="p2CardBg" x1="90" y1="0" x2="90" y2="250" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="100%" stop-color="#f8f8f8"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="2" y="2" width="176" height="246" rx="12" fill="url(#p2CardBg)"/>
+                        <rect x="2" y="2" width="176" height="246" rx="12" fill="none" stroke="#d0d0d0" stroke-width="2"/>
+                        <text x="90" y="80" font-size="180" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#E74C3C" font-family="Arial, sans-serif">5</text>
+                        <text x="90" y="190" font-size="108" text-anchor="middle" dominant-baseline="central" fill="#E74C3C">♦</text>
+                    </svg>
+                    
+                    <!-- 第三张横牌 - 向右旋转90度 -->
+                    <svg class="card horizontal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 250">
+                        <defs>
+                            <linearGradient id="p3CardBg" x1="90" y1="0" x2="90" y2="250" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="100%" stop-color="#f8f8f8"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="2" y="2" width="176" height="246" rx="12" fill="url(#p3CardBg)"/>
+                        <rect x="2" y="2" width="176" height="246" rx="12" fill="none" stroke="#d0d0d0" stroke-width="2"/>
+                        <text x="90" y="80" font-size="180" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#000000" font-family="Arial, sans-serif">K</text>
+                        <text x="90" y="190" font-size="108" text-anchor="middle" dominant-baseline="central" fill="#000000">♠</text>
+                    </svg>
                 </div>
             </div>
 
@@ -517,40 +487,59 @@
                 
                 <!-- 内容区域 -->
                 <div class="spot-content">
-                    <!-- 统计信息 -->
-                    <div class="statistics">
-                        <div class="indicator">
-                            <svg viewBox="0 0 46 46">
-                                <circle cx="23" cy="23" r="20" fill="rgba(60, 0, 0, 0.8)"/>
-                                <circle cx="23" cy="23" r="18" stroke="#FF9792" stroke-width="3" 
-                                        fill="none" stroke-dasharray="113.1" stroke-dashoffset="16.97"
-                                        stroke-linecap="round"/>
-                            </svg>
-                            <div class="indicator-text">75%</div>
-                        </div>
-                        <div class="info">
-                            <div class="info-line">
-                                <!-- 欧元符号SVG -->
-                                <svg class="icon-currency" viewBox="0 0 24 24" fill="white">
-                                    <path d="M15 18.5C12.5 18.5 10.3 17.1 9.2 15H15L16 13H8.6C8.5 12.5 8.5 12 8.5 11.5S8.5 10.5 8.6 10H16L17 8H9.2C10.3 5.9 12.5 4.5 15 4.5C16.3 4.5 17.5 4.9 18.5 5.6L20 4.1C18.6 3 16.9 2.5 15 2.5C11.5 2.5 8.5 4.6 7.1 7.5H4L3 9.5H6.5C6.5 10 6.5 10.5 6.5 11S6.5 12 6.5 12.5H3L2 14.5H7.1C8.5 17.4 11.5 19.5 15 19.5C16.9 19.5 18.6 19 20 17.9L18.5 16.4C17.5 17.1 16.3 17.5 15 18.5Z"/>
-                                </svg>
-                                <span class="amount">1,844.34</span>
-                            </div>
-                            <div class="info-line">
-                                <!-- 单人头像SVG - 棕黄色 -->
-                                <svg class="icon-person" viewBox="0 0 24 24" fill="#DAA520">
-                                    <path d="M12,12A6,6 0 0,0 6,18C6,18.55 6.45,19 7,19H17C17.55,19 18,18.55 18,18A6,6 0 0,0 12,12M12,2A4,4 0 0,1 16,6A4,4 0 0,1 12,10A4,4 0 0,1 8,6A4,4 0 0,1 12,2Z"/>
-                                </svg>
-                                <span>47</span>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- 占位div保持顶部空间 -->
+                    <div></div>
                     
                     <!-- 标题和赔率 -->
                     <div class="title-section">
                         <div class="zone-odds">0.95:1</div>
                         <div class="zone-title">BANKER</div>
                     </div>
+                </div>
+                
+                <!-- 扑克牌 -->
+                <div class="cards-container">
+                    <!-- 第一张竖牌 -->
+                    <svg class="card" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 250">
+                        <defs>
+                            <linearGradient id="b1CardBg" x1="90" y1="0" x2="90" y2="250" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="100%" stop-color="#f8f8f8"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="2" y="2" width="176" height="246" rx="12" fill="url(#b1CardBg)"/>
+                        <rect x="2" y="2" width="176" height="246" rx="12" fill="none" stroke="#d0d0d0" stroke-width="2"/>
+                        <text x="90" y="80" font-size="180" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#E74C3C" font-family="Arial, sans-serif">8</text>
+                        <text x="90" y="190" font-size="108" text-anchor="middle" dominant-baseline="central" fill="#E74C3C">♥</text>
+                    </svg>
+                    
+                    <!-- 第二张竖牌 -->
+                    <svg class="card" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 250">
+                        <defs>
+                            <linearGradient id="b2CardBg" x1="90" y1="0" x2="90" y2="250" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="100%" stop-color="#f8f8f8"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="2" y="2" width="176" height="246" rx="12" fill="url(#b2CardBg)"/>
+                        <rect x="2" y="2" width="176" height="246" rx="12" fill="none" stroke="#d0d0d0" stroke-width="2"/>
+                        <text x="90" y="80" font-size="180" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#000000" font-family="Arial, sans-serif">6</text>
+                        <text x="90" y="190" font-size="108" text-anchor="middle" dominant-baseline="central" fill="#000000">♠</text>
+                    </svg>
+                    
+                    <!-- 第三张横牌 - 向左旋转-90度 -->
+                    <svg class="card horizontal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 250">
+                        <defs>
+                            <linearGradient id="b3CardBg" x1="90" y1="0" x2="90" y2="250" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="100%" stop-color="#f8f8f8"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="2" y="2" width="176" height="246" rx="12" fill="url(#b3CardBg)"/>
+                        <rect x="2" y="2" width="176" height="246" rx="12" fill="none" stroke="#d0d0d0" stroke-width="2"/>
+                        <text x="90" y="80" font-size="180" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#E74C3C" font-family="Arial, sans-serif">A</text>
+                        <text x="90" y="190" font-size="108" text-anchor="middle" dominant-baseline="central" fill="#E74C3C">♦</text>
+                    </svg>
                 </div>
             </div>
 
@@ -575,35 +564,6 @@
                 <div class="spot-background"></div>
                 
                 <div class="spot-content">
-                    <!-- 统计信息 -->
-                    <div class="statistics">
-                        <div class="indicator">
-                            <svg viewBox="0 0 46 46">
-                                <circle cx="23" cy="23" r="20" fill="rgba(0, 40, 0, 0.8)"/>
-                                <circle cx="23" cy="23" r="18" stroke="#0DD80C" stroke-width="3" 
-                                        fill="none" stroke-dasharray="113.1" stroke-dashoffset="108.58"
-                                        stroke-linecap="round"/>
-                            </svg>
-                            <div class="indicator-text">5%</div>
-                        </div>
-                        <div class="info">
-                            <div class="info-line">
-                                <!-- 欧元符号SVG -->
-                                <svg class="icon-currency" viewBox="0 0 24 24" fill="white">
-                                    <path d="M15 18.5C12.5 18.5 10.3 17.1 9.2 15H15L16 13H8.6C8.5 12.5 8.5 12 8.5 11.5S8.5 10.5 8.6 10H16L17 8H9.2C10.3 5.9 12.5 4.5 15 4.5C16.3 4.5 17.5 4.9 18.5 5.6L20 4.1C18.6 3 16.9 2.5 15 2.5C11.5 2.5 8.5 4.6 7.1 7.5H4L3 9.5H6.5C6.5 10 6.5 10.5 6.5 11S6.5 12 6.5 12.5H3L2 14.5H7.1C8.5 17.4 11.5 19.5 15 19.5C16.9 19.5 18.6 19 20 17.9L18.5 16.4C17.5 17.1 16.3 17.5 15 18.5Z"/>
-                                </svg>
-                                <span class="amount">141.39</span>
-                            </div>
-                            <div class="info-line">
-                                <!-- 单人头像SVG - 亮绿色 -->
-                                <svg class="icon-person" viewBox="0 0 24 24" fill="#00FF00">
-                                    <path d="M12,12A6,6 0 0,0 6,18C6,18.55 6.45,19 7,19H17C17.55,19 18,18.55 18,18A6,6 0 0,0 12,12M12,2A4,4 0 0,1 16,6A4,4 0 0,1 12,10A4,4 0 0,1 8,6A4,4 0 0,1 12,2Z"/>
-                                </svg>
-                                <span>11</span>
-                            </div>
-                        </div>
-                    </div>
-                    
                     <!-- 标题和赔率 -->
                     <div class="title-section">
                         <div class="zone-title">TIE</div>
