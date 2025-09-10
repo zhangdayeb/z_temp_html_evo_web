@@ -39,7 +39,7 @@
         /* 主要投注区域容器 */
         .main-betting-area {
             position: relative;
-            height: 220px;
+            height: 140px;
             width: 100%;
             display: flex;
             justify-content: space-between;
@@ -145,31 +145,31 @@
         
         /* Player区域扑克牌位置 */
         .player-spot .cards-container {
-            left: 40%;
+            left: 35%;
         }
         
         /* Banker区域扑克牌位置 */
         .banker-spot .cards-container {
-            left: 60%;
+            left: 65%;
         }
         
         /* 扑克牌样式 */
         .card {
-            width: 26px;
-            height: 36px;
+            width: 36px;
+            height: 68px;
             filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
         }
         
         /* 横牌样式 - Player向右旋转90度 */
         .player-spot .card.horizontal {
-            transform: rotate(90deg);
-            margin: 0 4px;
+            transform: rotate(90deg) translateX(8px);
+            margin: 8px;
         }
         
         /* 横牌样式 - Banker向左旋转-90度 */
         .banker-spot .card.horizontal {
-            transform: rotate(-90deg);
-            margin: 0 4px;
+            transform: rotate(-90deg) translateX(-8px);
+            margin: 0 8px;
         }
 
         /* 标题和赔率 */
@@ -216,9 +216,9 @@
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            top: 30px;
+            top: 23px;
             width: calc(31%);
-            height: calc(100% - 30px);
+            height: calc(100% - 23px);
             z-index: 10;
         }
 
@@ -228,20 +228,20 @@
 
         .tie-spot .spot-content {
             padding: 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             height: 100%;
+            align-items: center;
             position: relative;
             z-index: 2;
         }
 
         /* 和局标题和赔率横向排列 */
         .tie-spot .title-section {
+            position: absolute;
+            bottom: 14px;
             flex-direction: row;
             gap: 10px;
             align-items: center;
+
         }
 
         .tie-spot .zone-title {
@@ -334,7 +334,7 @@
             }
 
             .main-betting-area {
-                height: 190px;
+                height: 140px;
             }
 
             .zone-title {
@@ -346,7 +346,7 @@
             }
 
             .tie-spot .zone-title {
-                font-size: 16px;
+                font-size: 18px;
             }
 
             .pairs-row {
@@ -368,11 +368,7 @@
             .banker-spot .spot-content {
                 left: 65px;
             }
-            
-            .card {
-                width: 20px;
-                height: 28px;
-            }
+
         }
     </style>
 </head>
@@ -418,6 +414,19 @@
                 
                 <!-- 扑克牌 -->
                 <div class="cards-container">
+                    <!-- 第一张横牌 - 向右旋转90度 -->
+                    <svg class="card horizontal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 250">
+                        <defs>
+                            <linearGradient id="p3CardBg" x1="90" y1="0" x2="90" y2="250" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="100%" stop-color="#f8f8f8"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="2" y="2" width="176" height="246" rx="12" fill="url(#p3CardBg)"/>
+                        <rect x="2" y="2" width="176" height="246" rx="12" fill="none" stroke="#d0d0d0" stroke-width="2"/>
+                        <text x="90" y="80" font-size="180" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#000000" font-family="Arial, sans-serif">K</text>
+                        <text x="90" y="190" font-size="108" text-anchor="middle" dominant-baseline="central" fill="#000000">♠</text>
+                    </svg>
                     <!-- 第一张竖牌 -->
                     <svg class="card" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 250">
                         <defs>
@@ -432,7 +441,7 @@
                         <text x="90" y="190" font-size="108" text-anchor="middle" dominant-baseline="central" fill="#000000">♣</text>
                     </svg>
                     
-                    <!-- 第二张竖牌 -->
+                    <!-- 第二张张竖牌 -->
                     <svg class="card" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 250">
                         <defs>
                             <linearGradient id="p2CardBg" x1="90" y1="0" x2="90" y2="250" gradientUnits="userSpaceOnUse">
@@ -446,19 +455,7 @@
                         <text x="90" y="190" font-size="108" text-anchor="middle" dominant-baseline="central" fill="#E74C3C">♦</text>
                     </svg>
                     
-                    <!-- 第三张横牌 - 向右旋转90度 -->
-                    <svg class="card horizontal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 250">
-                        <defs>
-                            <linearGradient id="p3CardBg" x1="90" y1="0" x2="90" y2="250" gradientUnits="userSpaceOnUse">
-                                <stop offset="0%" stop-color="#ffffff"/>
-                                <stop offset="100%" stop-color="#f8f8f8"/>
-                            </linearGradient>
-                        </defs>
-                        <rect x="2" y="2" width="176" height="246" rx="12" fill="url(#p3CardBg)"/>
-                        <rect x="2" y="2" width="176" height="246" rx="12" fill="none" stroke="#d0d0d0" stroke-width="2"/>
-                        <text x="90" y="80" font-size="180" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="#000000" font-family="Arial, sans-serif">K</text>
-                        <text x="90" y="190" font-size="108" text-anchor="middle" dominant-baseline="central" fill="#000000">♠</text>
-                    </svg>
+                    
                 </div>
             </div>
 
