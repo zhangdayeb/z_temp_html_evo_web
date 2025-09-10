@@ -138,11 +138,13 @@
             gap: 6px;
         }
 
-        /* 圆形百分比指示器 */
+        /* 圆形百分比指示器 - 使用CSS变量 */
         .indicator {
             position: relative;
-            width: 40px;
-            height: 40px;
+            width: 46px;
+            height: 46px;
+            --indicator-size: 46px;
+            flex-shrink: 0;
         }
 
         .indicator svg {
@@ -157,12 +159,26 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
-            font-size: 10px;
             font-weight: bold;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: baseline;
+            gap: 1px;
+        }
+        
+        /* 百分比数字部分 - 基于比例计算 */
+        .indicator-text .number {
+            font-size: calc(var(--indicator-size) * 0.35);
+            font-weight: 700;
+        }
+        
+        /* 百分号符号部分 - 更小 */
+        .indicator-text .percent {
+            font-size: calc(var(--indicator-size) * 0.2);
+            font-weight: 600;
         }
 
-        /* 信息显示 */
+        /* 信息显示区域 */
         .info {
             display: flex;
             flex-direction: column;
@@ -173,10 +189,11 @@
             display: flex;
             align-items: center;
             gap: 3px;
-            font-size: 11px;
             color: white;
+            font-size: 11px;
         }
 
+        /* 金额样式 */
         .info-line .amount {
             font-weight: 600;
         }
@@ -212,25 +229,30 @@
             align-items: flex-end;
         }
 
-        /* 标题和赔率 */
+        /* 标题和赔率 - 专业样式 */
         .title-section {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 3px;
+            gap: 2px;
         }
 
         .zone-title {
-            font-size: 20px;
-            font-weight: 900;
-            letter-spacing: 1px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
-            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0;
+            line-height: 22px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            font-family: 'Palatino', 'Georgia', serif;
+            white-space: pre;
         }
 
         .zone-odds {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
+            line-height: 1;
+            margin-top: 4px;
         }
 
         .player-spot .zone-odds {
@@ -394,11 +416,6 @@
                 font-size: 12px;
             }
 
-            .indicator {
-                width: 36px;
-                height: 36px;
-            }
-
             .tie-spot .zone-title {
                 font-size: 16px;
             }
@@ -459,12 +476,19 @@
                     <div class="statistics">
                         <div class="indicator">
                             <svg viewBox="0 0 46 46">
-                                <circle cx="23" cy="23" r="20" fill="rgba(0, 20, 60, 0.8)"/>
+                                <!-- 深色背景圆 -->
+                                <circle cx="23" cy="23" r="20" fill="rgba(0, 30, 90, 0.5)"/>
+                                <!-- 亮色圆环轨道 -->
+                                <circle cx="23" cy="23" r="18" stroke="rgba(0, 150, 255, 0.3)" stroke-width="3" 
+                                        fill="none"/>
+                                <!-- 进度圆环 -->
                                 <circle cx="23" cy="23" r="18" stroke="#0096FF" stroke-width="3" 
                                         fill="none" stroke-dasharray="113.1" stroke-dashoffset="90.48"
                                         stroke-linecap="round"/>
                             </svg>
-                            <div class="indicator-text">20%</div>
+                            <div class="indicator-text">
+                                <span class="number">20</span><span class="percent">%</span>
+                            </div>
                         </div>
                         <div class="info">
                             <div class="info-line">
@@ -521,12 +545,19 @@
                     <div class="statistics">
                         <div class="indicator">
                             <svg viewBox="0 0 46 46">
-                                <circle cx="23" cy="23" r="20" fill="rgba(60, 0, 0, 0.8)"/>
+                                <!-- 深色背景圆 -->
+                                <circle cx="23" cy="23" r="20" fill="rgba(80, 0, 0, 0.5)"/>
+                                <!-- 亮色圆环轨道 -->
+                                <circle cx="23" cy="23" r="18" stroke="rgba(255, 151, 146, 0.3)" stroke-width="3" 
+                                        fill="none"/>
+                                <!-- 进度圆环 -->
                                 <circle cx="23" cy="23" r="18" stroke="#FF9792" stroke-width="3" 
                                         fill="none" stroke-dasharray="113.1" stroke-dashoffset="16.97"
                                         stroke-linecap="round"/>
                             </svg>
-                            <div class="indicator-text">75%</div>
+                            <div class="indicator-text">
+                                <span class="number">75</span><span class="percent">%</span>
+                            </div>
                         </div>
                         <div class="info">
                             <div class="info-line">
@@ -579,12 +610,19 @@
                     <div class="statistics">
                         <div class="indicator">
                             <svg viewBox="0 0 46 46">
-                                <circle cx="23" cy="23" r="20" fill="rgba(0, 40, 0, 0.8)"/>
+                                <!-- 深色背景圆 -->
+                                <circle cx="23" cy="23" r="20" fill="rgba(0, 60, 0, 0.5)"/>
+                                <!-- 亮色圆环轨道 -->
+                                <circle cx="23" cy="23" r="18" stroke="rgba(13, 216, 12, 0.3)" stroke-width="3" 
+                                        fill="none"/>
+                                <!-- 进度圆环 -->
                                 <circle cx="23" cy="23" r="18" stroke="#0DD80C" stroke-width="3" 
                                         fill="none" stroke-dasharray="113.1" stroke-dashoffset="108.58"
                                         stroke-linecap="round"/>
                             </svg>
-                            <div class="indicator-text">5%</div>
+                            <div class="indicator-text">
+                                <span class="number">5</span><span class="percent">%</span>
+                            </div>
                         </div>
                         <div class="info">
                             <div class="info-line">
