@@ -12,232 +12,143 @@
         }
 
         body {
-            background: #1a1a1a;
+            background: #000;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             color: white;
             min-height: 100vh;
             display: flex;
             align-items: flex-end;
-            padding: 20px;
+            justify-content: center;
         }
 
-        /* 主容器 */
+        /* 主容器 - 两行布局 */
         .table-info-container {
             width: 100%;
-            max-width: 768px;
-            margin: 0 auto;
-            padding: 16px 20px;
-            background: 
-                linear-gradient(rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 140%), 
-                linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.3) 100%);
-            border-radius: 12px 12px 0 0;
-            backdrop-filter: blur(10px);
+            background: #000;
+            padding: 4px 12px 6px 12px;
+            font-size: 13px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         /* 信息行 */
         .info-row {
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
+            padding: 2px 0;
         }
 
-        .info-row:last-child {
-            margin-bottom: 0;
-        }
-
-        /* 通用信息块样式 */
-        .info-block {
+        /* 信息项 */
+        .info-item {
             display: flex;
-            flex-direction: column;
-            gap: 4px;
+            align-items: baseline;
+            gap: 6px;
         }
 
-        /* 标题样式 */
-        .info-title {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.6);
+        /* 标签样式 */
+        .label {
+            color: rgba(255, 255, 255, 1);
             font-weight: 400;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
         }
 
-        /* 金额样式 */
-        .info-amount {
-            font-size: 16px;
-            color: #ffffff;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-        }
-
-        /* 余额特殊样式 */
-        .balance-amount {
+        /* 金额黄色 */
+        .amount {
             color: #ffd700;
-            font-size: 18px;
-        }
-
-        /* 时钟容器 */
-        .clock-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-        }
-
-        .clock-time {
-            font-size: 20px;
             font-weight: 600;
-            color: #ffffff;
-            letter-spacing: 1px;
         }
 
-        .game-time {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.5);
-            letter-spacing: 0.5px;
+        /* 时间容器 */
+        .time-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #888;
         }
 
-        /* 桌台名称 */
-        .table-name-container {
-            text-align: right;
+        /* 时间分隔符 */
+        .time-separator {
+            color: #666;
+        }
+
+        /* 桌台信息 */
+        .table-info {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
         }
 
         .table-name {
-            font-size: 14px;
             color: #ffffff;
             font-weight: 500;
-            margin-bottom: 4px;
         }
 
         .table-limits {
-            font-size: 12px;
             color: rgba(255, 255, 255, 0.7);
         }
 
-        /* 单行消息 */
-        .message-line {
-            height: 20px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 13px;
+        /* 响应式布局 */
+        @media (max-width: 768px) {
+            .table-info-container {
+                font-size: 12px;
+                padding: 3px 10px 5px 10px;
+            }
         }
 
-        /* 响应式布局 */
         @media (max-width: 640px) {
             .table-info-container {
-                padding: 12px 16px;
-            }
-
-            .info-row {
-                flex-wrap: wrap;
-                gap: 12px;
-            }
-
-            .info-title {
                 font-size: 11px;
+                padding: 3px 8px 4px 8px;
             }
 
-            .info-amount {
-                font-size: 14px;
-            }
-
-            .balance-amount {
-                font-size: 16px;
-            }
-
-            .clock-time {
-                font-size: 18px;
-            }
-
-            .table-name {
-                font-size: 13px;
-            }
-
+            /* 小屏幕时隐藏桌台限额 */
             .table-limits {
-                font-size: 11px;
+                display: none;
             }
         }
 
-        /* 横屏模式优化 */
-        @media (orientation: landscape) and (max-height: 500px) {
+        @media (max-width: 480px) {
             .table-info-container {
-                padding: 10px 16px;
+                font-size: 10px;
             }
 
-            .info-row {
-                margin-bottom: 8px;
+            .info-item,
+            .time-container,
+            .table-info {
+                gap: 4px;
             }
-
-            .message-line {
-                height: 16px;
-                margin-bottom: 4px;
-            }
-        }
-
-        /* 渐变背景动画效果 */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .table-info-container {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        /* 货币符号样式 */
-        .currency-symbol {
-            color: rgba(255, 255, 255, 0.9);
-            margin-right: 2px;
-        }
-
-        /* 分隔线 */
-        .info-row + .info-row {
-            padding-top: 12px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
     </style>
 </head>
 <body>
     <div class="table-info-container">
-        <!-- 单行消息区域 -->
-        <div class="message-line"></div>
-
-        <!-- 第一行：总投注和时钟 -->
+        <!-- 第一行：Total Bet 和 时间 -->
         <div class="info-row">
-            <div class="info-block">
-                <span class="info-title">Total Bet</span>
-                <span class="info-amount">
-                    <span class="currency-symbol">€</span>0
-                </span>
+            <!-- Total Bet -->
+            <div class="info-item">
+                <span class="label">Total Bet</span>
+                <span class="amount">€0</span>
             </div>
-            
-            <div class="clock-container">
-                <div class="clock-time">11:35</div>
-                <div class="game-time">03:34:58</div>
+
+            <!-- 时间 -->
+            <div class="time-container">
+                <span>11:37</span>
+                <span class="time-separator">#</span>
+                <span>03:37:28</span>
             </div>
         </div>
 
-        <!-- 第二行：余额和桌台信息 -->
+        <!-- 第二行：Balance 和 桌台信息 -->
         <div class="info-row">
-            <div class="info-block">
-                <span class="info-title">Balance</span>
-                <span class="info-amount balance-amount">
-                    <span class="currency-symbol">€</span>931,889.82
-                </span>
+            <!-- Balance -->
+            <div class="info-item">
+                <span class="label">Balance</span>
+                <span class="amount">€931,889.82</span>
             </div>
-            
-            <div class="table-name-container">
-                <div class="table-name">Always 8 Baccarat</div>
-                <div class="table-limits">€1 – 25,000</div>
+
+            <!-- 桌台信息 -->
+            <div class="table-info">
+                <span class="table-name">Always 8 Baccarat</span>
+                <span class="table-limits">€1 – 25,000</span>
             </div>
         </div>
     </div>
