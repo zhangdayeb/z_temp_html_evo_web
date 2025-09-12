@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百家乐圆环图标</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #2a2a2a;
+            padding: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .icon-container {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .icon-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .icon-wrapper {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 10px;
+        }
+
+        .label {
+            color: #ffffff;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        /* 圆环样式 */
+        .ring {
+            fill: none;
+            stroke-width: 6;
+        }
+
+        .banker-ring {
+            stroke: #dc3545;
+        }
+
+        .player-ring {
+            stroke: #007bff;
+        }
+
+        /* 对子标记点样式 - 粗黑边框 */
+        .pair-dot {
+            stroke: #1a1a1a;  /* 黑色边框 */
+            stroke-width: 4;   /* 粗边框 */
+        }
+
+        .banker-pair-dot {
+            fill: #dc3545;
+        }
+
+        .player-pair-dot {
+            fill: #007bff;
+        }
+
+        /* 标题样式 */
+        .section-title {
+            width: 100%;
+            color: #fff;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* 分组容器 */
+        .group-container {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 庄的4种组合 -->
+    <div class="section-title">庄（Banker）</div>
+    <div class="group-container">
+        <!-- 庄 -->
+        <div class="icon-container">
+            <div class="icon-wrapper">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                    <!-- 完整的红色圆环 -->
+                    <circle cx="50" cy="50" r="40" class="ring banker-ring"/>
+                </svg>
+            </div>
+            <div class="label">庄</div>
+        </div>
+
+        <!-- 庄+庄对 -->
+        <div class="icon-container">
+            <div class="icon-wrapper">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                    <!-- 完整的红色圆环 -->
+                    <circle cx="50" cy="50" r="40" class="ring banker-ring"/>
+                    <!-- 庄对点（右下角） -->
+                    <circle cx="78" cy="78" r="9" class="pair-dot banker-pair-dot"/>
+                </svg>
+            </div>
+            <div class="label">庄+庄对</div>
+        </div>
+
+        <!-- 庄+闲对 -->
+        <div class="icon-container">
+            <div class="icon-wrapper">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                    <!-- 完整的红色圆环 -->
+                    <circle cx="50" cy="50" r="40" class="ring banker-ring"/>
+                    <!-- 闲对点（左上角） -->
+                    <circle cx="22" cy="22" r="9" class="pair-dot player-pair-dot"/>
+                </svg>
+            </div>
+            <div class="label">庄+闲对</div>
+        </div>
+
+        <!-- 庄+庄对+闲对 -->
+        <div class="icon-container">
+            <div class="icon-wrapper">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                    <!-- 完整的红色圆环 -->
+                    <circle cx="50" cy="50" r="40" class="ring banker-ring"/>
+                    <!-- 庄对点（右下角） -->
+                    <circle cx="78" cy="78" r="9" class="pair-dot banker-pair-dot"/>
+                    <!-- 闲对点（左上角） -->
+                    <circle cx="22" cy="22" r="9" class="pair-dot player-pair-dot"/>
+                </svg>
+            </div>
+            <div class="label">庄+庄对+闲对</div>
+        </div>
+    </div>
+
+    <!-- 闲的4种组合 -->
+    <div class="section-title">闲（Player）</div>
+    <div class="group-container">
+        <!-- 闲 -->
+        <div class="icon-container">
+            <div class="icon-wrapper">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                    <!-- 完整的蓝色圆环 -->
+                    <circle cx="50" cy="50" r="40" class="ring player-ring"/>
+                </svg>
+            </div>
+            <div class="label">闲</div>
+        </div>
+
+        <!-- 闲+庄对 -->
+        <div class="icon-container">
+            <div class="icon-wrapper">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                    <!-- 完整的蓝色圆环 -->
+                    <circle cx="50" cy="50" r="40" class="ring player-ring"/>
+                    <!-- 庄对点（右下角） -->
+                    <circle cx="78" cy="78" r="9" class="pair-dot banker-pair-dot"/>
+                </svg>
+            </div>
+            <div class="label">闲+庄对</div>
+        </div>
+
+        <!-- 闲+闲对 -->
+        <div class="icon-container">
+            <div class="icon-wrapper">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                    <!-- 完整的蓝色圆环 -->
+                    <circle cx="50" cy="50" r="40" class="ring player-ring"/>
+                    <!-- 闲对点（左上角） -->
+                    <circle cx="22" cy="22" r="9" class="pair-dot player-pair-dot"/>
+                </svg>
+            </div>
+            <div class="label">闲+闲对</div>
+        </div>
+
+        <!-- 闲+庄对+闲对 -->
+        <div class="icon-container">
+            <div class="icon-wrapper">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                    <!-- 完整的蓝色圆环 -->
+                    <circle cx="50" cy="50" r="40" class="ring player-ring"/>
+                    <!-- 庄对点（右下角） -->
+                    <circle cx="78" cy="78" r="9" class="pair-dot banker-pair-dot"/>
+                    <!-- 闲对点（左上角） -->
+                    <circle cx="22" cy="22" r="9" class="pair-dot player-pair-dot"/>
+                </svg>
+            </div>
+            <div class="label">闲+庄对+闲对</div>
+        </div>
+    </div>
+</body>
+</html>

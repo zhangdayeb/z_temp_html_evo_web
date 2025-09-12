@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>静态霓虹倒计时</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(42, 24, 16, 0.3);  /* 整体背景透明度设为0.3 */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+        }
+        
+        .container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+        
+        /* 多层画布 */
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        /* 背景层画布 */
+        #backgroundCanvas {
+            z-index: 1;
+        }
+        
+        /* 发光层画布 */
+        #glowCanvas {
+            z-index: 2;
+        }
+        
+        /* 主画布 */
+        #mainCanvas {
+            z-index: 3;
+        }
+        
+        /* 数字显示 */
+        .number {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 96px;
+            font-weight: 600;
+            color: white;
+            z-index: 10;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            user-select: none;
+            line-height: 1;
+        }
+        
+        /* 控制按钮 */
+        .controls {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+        }
+        
+        button {
+            padding: 12px 30px;
+            font-size: 16px;
+            background: #00e676;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 230, 118, 0.3);
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="backgroundCanvas" width="200" height="200"></canvas>
+        <canvas id="glowCanvas" width="200" height="200"></canvas>
+        <canvas id="mainCanvas" width="200" height="200"></canvas>
+        <div class="number" id="number">7</div>
+    </div>
+    
+    <div class="controls">
+        <button onclick="drawCountdown(7, 0.7)">显示 7</button>
+        <button onclick="drawCountdown(3, 0.3)">显示 3（紧急）</button>
+        <button onclick="drawCountdown(10, 1.0)">显示 10（全）</button>
+    </div>
+    
+    <script>
+        const bgCanvas = document.getElementById('backgroundCanvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        const glowCanvas = document.getElementById('glowCanvas');
+        const glowCtx = glowCanvas.getContext('2d');
+        const mainCanvas = document.getElementById('mainCanvas');
+        const mainCtx = mainCanvas.getContext('2d');
+        const numberEl = document.getElementById('number');
+        
+        const centerX = 100;
+        const centerY = 100;
+        const radius = 80;
+        
+        function drawCountdown(number = 7, progress = 0.7) {
+            // 更新数字
+            numberEl.textContent = number;
+            
+            // 决定颜色（3秒及以下为紧急状态）
+            const isUrgent = number <= 3;
+            const color = isUrgent ? 
+                { r: 255, g: 68, b: 68, hex: '#ff4444', dark: '#cc2222' } :   
+                { r: 0, g: 255, b: 136, hex: '#00ff88', dark: '#00dd77' };     // dark从#00cc66改为#00dd77，更亮
+            
+            // 清空所有画布
+            bgCtx.clearRect(0, 0, 200, 200);
+            glowCtx.clearRect(0, 0, 200, 200);
+            mainCtx.clearRect(0, 0, 200, 200);
+            
+            // 1. 绘制黑色半透明背景圆
+            bgCtx.beginPath();
+            bgCtx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            bgCtx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            bgCtx.fill();
+            
+            // 2. 绘制极淡的背景圆环轨道
+            bgCtx.beginPath();
+            bgCtx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            bgCtx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+            bgCtx.lineWidth = 10;
+            bgCtx.stroke();
+            
+            // 3. 定义圆环的起始和结束角度
+            const startAngle = -Math.PI / 2;  // 顶部正中央
+            const totalAngle = Math.PI * 2 * progress;
+            const endAngle = startAngle + totalAngle;
+            
+            // 4. 绘制发光效果（减弱光晕强度）
+            // 外层大光晕
+            glowCtx.save();
+            glowCtx.filter = 'blur(12px)';
+            glowCtx.beginPath();
+            glowCtx.arc(centerX, centerY, radius, startAngle, endAngle);
+            glowCtx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, 0.15)`;  // 从0.3降到0.15
+            glowCtx.lineWidth = 25;  // 从35降到25
+            glowCtx.lineCap = 'round';
+            glowCtx.stroke();
+            glowCtx.restore();
+            
+            // 中层光晕
+            glowCtx.save();
+            glowCtx.filter = 'blur(6px)';
+            glowCtx.beginPath();
+            glowCtx.arc(centerX, centerY, radius, startAngle, endAngle);
+            glowCtx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, 0.2)`;  // 从0.4降到0.2
+            glowCtx.lineWidth = 15;  // 从20降到15
+            glowCtx.lineCap = 'round';
+            glowCtx.stroke();
+            glowCtx.restore();
+            
+            // 5. 第一步改进：绘制双层圆环（深绿底色 + 亮绿边框）
+            
+            // 5.1 先绘制深色底层（更粗）
+            mainCtx.save();
+            mainCtx.beginPath();
+            mainCtx.arc(centerX, centerY, radius, startAngle, endAngle);
+            mainCtx.strokeStyle = color.dark;  // 深绿色
+            mainCtx.lineWidth = 10;
+            mainCtx.lineCap = 'round';
+            mainCtx.stroke();
+            mainCtx.restore();
+            
+            // 5.2 绘制亮色边框（上下两条细线）
+            // 外边缘亮线
+            mainCtx.save();
+            mainCtx.beginPath();
+            mainCtx.arc(centerX, centerY, radius + 4, startAngle, endAngle);
+            mainCtx.strokeStyle = color.hex;  // 亮绿色
+            mainCtx.lineWidth = 2;
+            mainCtx.lineCap = 'round';
+            mainCtx.stroke();
+            mainCtx.restore();
+            
+            // 内边缘亮线
+            mainCtx.save();
+            mainCtx.beginPath();
+            mainCtx.arc(centerX, centerY, radius - 4, startAngle, endAngle);
+            mainCtx.strokeStyle = color.hex;  // 亮绿色
+            mainCtx.lineWidth = 2;
+            mainCtx.lineCap = 'round';
+            mainCtx.stroke();
+            mainCtx.restore();
+            
+            // 6. 第二步改进：在尾部位置添加径向渐变遮罩
+            if (progress > 0.1) {
+                // 计算尾部位置
+                const tailX = centerX + Math.cos(endAngle) * radius;
+                const tailY = centerY + Math.sin(endAngle) * radius;
+                
+                // 创建临时画布用于遮罩
+                const maskCanvas = document.createElement('canvas');
+                maskCanvas.width = 200;
+                maskCanvas.height = 200;
+                const maskCtx = maskCanvas.getContext('2d');
+                
+                // 先将主画布内容复制到临时画布
+                maskCtx.drawImage(mainCanvas, 0, 0);
+                
+                // 清空主画布
+                mainCtx.clearRect(0, 0, 200, 200);
+                
+                // 重新绘制，但在尾部应用径向渐变遮罩
+                mainCtx.save();
+                mainCtx.drawImage(maskCanvas, 0, 0);
+                
+                // 设置合成模式为"destination-out"（擦除模式）
+                mainCtx.globalCompositeOperation = 'destination-out';
+                
+                // 创建径向渐变（中心完全透明，边缘不透明）
+                const radialGradient = mainCtx.createRadialGradient(
+                    tailX, tailY, 0,      // 内圆中心
+                    tailX, tailY, 20      // 外圆半径（从30减小到20）
+                );
+                
+                // 设置渐变（更陡峭的过渡）
+                radialGradient.addColorStop(0, 'rgba(0, 0, 0, 1)');    // 中心：完全擦除
+                radialGradient.addColorStop(0.2, 'rgba(0, 0, 0, 0.95)'); // 快速渐变
+                radialGradient.addColorStop(0.5, 'rgba(0, 0, 0, 0.5)'); // 中间过渡
+                radialGradient.addColorStop(0.8, 'rgba(0, 0, 0, 0.1)'); // 接近边缘
+                radialGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');    // 边缘：不擦除
+                
+                // 应用径向渐变遮罩
+                mainCtx.fillStyle = radialGradient;
+                mainCtx.fillRect(tailX - 20, tailY - 20, 40, 40);
+                
+                mainCtx.restore();
+                
+                // 重新绘制圆环（避免被遮罩影响的部分）
+                // 绘制前80%的部分（不受遮罩影响）
+                const safeEndAngle = startAngle + totalAngle * 0.8;
+                
+                // 深色底层
+                mainCtx.save();
+                mainCtx.beginPath();
+                mainCtx.arc(centerX, centerY, radius, startAngle, safeEndAngle);
+                mainCtx.strokeStyle = color.dark;
+                mainCtx.lineWidth = 10;
+                mainCtx.lineCap = 'round';
+                mainCtx.stroke();
+                mainCtx.restore();
+                
+                // 外边缘亮线
+                mainCtx.save();
+                mainCtx.beginPath();
+                mainCtx.arc(centerX, centerY, radius + 4, startAngle, safeEndAngle);
+                mainCtx.strokeStyle = color.hex;
+                mainCtx.lineWidth = 2;
+                mainCtx.lineCap = 'round';
+                mainCtx.stroke();
+                mainCtx.restore();
+                
+                // 内边缘亮线
+                mainCtx.save();
+                mainCtx.beginPath();
+                mainCtx.arc(centerX, centerY, radius - 4, startAngle, safeEndAngle);
+                mainCtx.strokeStyle = color.hex;
+                mainCtx.lineWidth = 2;
+                mainCtx.lineCap = 'round';
+                mainCtx.stroke();
+                mainCtx.restore();
+            }
+            
+            // 7. 绘制圆环起点的亮点
+            mainCtx.save();
+            mainCtx.shadowBlur = 10;
+            mainCtx.shadowColor = color.hex;
+            mainCtx.beginPath();
+            const startX = centerX + Math.cos(startAngle) * radius;
+            const startY = centerY + Math.sin(startAngle) * radius;
+            mainCtx.arc(startX, startY, 5, 0, Math.PI * 2);
+            mainCtx.fillStyle = color.hex;
+            mainCtx.fill();
+            mainCtx.restore();
+            
+            // 更新数字颜色
+            if (isUrgent) {
+                numberEl.style.color = 'white';  // 数字保持白色
+                numberEl.style.textShadow = '0 0 15px rgba(255, 255, 150, 0.4)';  // 淡黄色光晕
+            } else {
+                numberEl.style.color = 'white';
+                numberEl.style.textShadow = '0 0 15px rgba(255, 255, 255, 0.4)';
+            }
+        }
+        
+        // 初始化显示
+        drawCountdown(7, 0.7);
+    </script>
+</body>
+</html>
